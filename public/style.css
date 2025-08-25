@@ -1,0 +1,178 @@
+/* --- GLOBAL STYLES --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1e1e1e;
+    font-family: sans-serif;
+    /* Prevent selecting text while dragging mouse for the wheel */
+    user-select: none;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+#hold-image {
+    width: 512px;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+/* --- WEAPON WHEEL STYLES --- */
+#weapon-wheel {
+    position: absolute;
+    width: 300px; /* The diameter of the wheel */
+    height: 300px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Initially hidden and non-interactive */
+    display: none; 
+    pointer-events: none; 
+    /* Flexbox to center the slots' origin point */
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* This centers the wheel on its top/left coords */
+}
+
+.weapon-slot {
+    position: absolute;
+    width: 80px; /* Size of the weapon slot circle */
+    height: 80px;
+    background-color: rgba(25, 25, 25, 0.8);
+    border: 2px solid #555;
+    border-radius: 50%;
+    /* --angle is a custom CSS variable we set with JS */
+    transform: rotate(var(--angle)) translate(150px) rotate(calc(-1 * var(--angle)));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s ease-out, background-color 0.1s;
+}
+
+.weapon-slot.highlighted {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: #fff;
+    transform: rotate(var(--angle)) translate(150px) rotate(calc(-1 * var(--angle))) scale(1.2);
+}
+
+.weapon-slot img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    filter: invert(0); /* if want to make weapons white change to 1*/
+}
+
+.weapon-slot.highlighted img {
+    filter: none; /* Make icon black on white background */
+}
+
+/* Dead zone in the middle of the wheel */
+#wheel-deadzone {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.5);
+    border: 2px dashed #555;
+}
+
+/* --- UI STYLES --- */
+/* Add this to your style.css file */
+#current-weapon-ui {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Position on the left */
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 2em; /* Same size as ammo counter */
+    font-weight: bold;
+    border-radius: 8px;
+    z-index: 10;
+}
+#ammo-counter {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* Position on the right */
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 2em; /* Same size as ammo counter */
+    font-weight: bold;
+    border-radius: 8px;
+    z-index: 10;
+}
+/* This is in your current style.css, we are replacing it */
+#hold-image { 
+    width: 512px;
+    height: auto; 
+    image-rendering: pixelated;
+}
+
+/* You might also have styles for shoot-gif and reload-gif, they will be combined. */
+#shoot-gif, #reload-gif {
+    width: 512px;
+    height: auto;
+    image-rendering: pixelated;
+}
+/* In your style.css */
+/* This single class now controls all weapon visuals, guaranteeing they are the same size. */
+.weapon-image {
+    /* Set height based on the viewport. 40vh = 40% of the screen's height. */
+    height: 40vh;
+
+    /* Set a max-height to prevent it getting too big on very tall screens */
+    max-height: 600px;
+    
+    /* Let the width adjust automatically to maintain the aspect ratio */
+    width: auto;
+    
+    image-rendering: pixelated; /* Keeps pixel art crisp */
+
+    /* Ensure the GIFs are not visible by default */
+    display: none;
+    position: absolute; /* Stack them on top of each other */
+}
+
+#weapon-display {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* A style.css fájl végére illeszd be */
+
+/* Stílus az új, különálló chambering animáció konténeréhez */
+/* A style.css fájlban */
+
+/* Cseréld le a régi #chamber-display szabályt erre a sokkal robusztusabbra */
+#chamber-display {
+    /* Abszolút pozicionálás */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Ez a trükk, ami tökéletesen középre teszi */
+
+    /* Alapból rejtve van, de ha látható, akkor flex container lesz */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Az img szabály változatlan maradhat, de győződj meg róla, hogy létezik */
+#chamber-display img {
+    height: 40vh;
+    max-height: 600px;
+    width: auto;
+    image-rendering: pixelated;
+}

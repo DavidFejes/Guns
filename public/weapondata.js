@@ -1,0 +1,84 @@
+const weapons = [
+    { 
+        name: "Pistol",
+        // Visuals
+        icon: "/weapons/pistol/pistol.png", 
+        holdImage: "/weapons/pistol/pistol.png",
+        shootGif: "/weapons/pistol/pistol-shoot.gif",
+        reloadGif: "/weapons/pistol/pistol-reload.gif",
+        // Stats
+        maxAmmo: 12,
+        shootDuration: 820, // Animation length
+        reloadDuration: 2510, // 2.5 seconds
+        // Behavior
+        isAutomatic: false, // <<<-- We can add custom behavior flags!
+        chamberGif: "", // <<< Üres string
+        chamberDuration: 0, // <<< Nulla
+        actionType: '' // <<< Üres string
+
+    },
+    { 
+        name: "SMG", 
+        icon: "smg.png", 
+        holdImage: "smg-full.png",
+        shootGif: "smg-shoot.gif",
+        reloadGif: "smg-reload.gif",
+        maxAmmo: 30,
+        shootDuration: 150,
+        reloadDuration: 2000,
+        isAutomatic: true,
+        chamberGif: "", // <<< Üres string
+        chamberDuration: 0, // <<< Nulla
+        actionType: '' // <<< Üres string
+
+    },
+    { 
+        name: "Shotgun", 
+        icon: "/weapons/shotgun/shotgun.png", 
+        holdImage: "/weapons/shotgun/shotgun.png",
+        shootGif: "/weapons/shotgun/shotgun-shoot.gif",
+        reloadGif: "/weapons/shotgun/shotgun-reload.gif",
+        maxAmmo: 8,
+        shootDuration: 580,
+        reloadDuration: 1150,
+        reloadType: "single_shell",
+        isAutomatic: false,
+        chamberGif: "", // <<< Üres string
+        chamberDuration: 0, // <<< Nulla
+        actionType: '' // <<< Üres string
+
+    },
+    { 
+        name: "Assault Rifle", 
+        icon: "/weapons/assaultrifle/assaultrifle.png", 
+        holdImage: "/weapons/assaultrifle/assaultrifle.png",
+        shootGif: "/weapons/assaultrifle/assaultrifle-shoot.gif",
+        reloadGif: "/weapons/assaultrifle/assaultrifle-reload.gif",
+        maxAmmo: 30,
+        shootDuration: 920,
+        reloadDuration: 730,
+        isAutomatic: true,
+        chamberGif: "", // <<< Üres string
+        chamberDuration: 0, // <<< Nulla
+        actionType: '' // <<< Üres string
+
+    },
+    { 
+        name: "Kar98", 
+        icon: "/weapons/kar98/kar98.png", 
+        holdImage: "/weapons/kar98/kar98.png",
+        shootGif: "/weapons/kar98/kar98-shoot.gif",
+        reloadGif: "/weapons/kar98/kar98-reload.gif",
+        chamberGif: "/weapons/kar98/kar98-chamber.gif",
+        maxAmmo: 5,
+        shootDuration: 1200,
+        reloadDuration: 3630,
+        chamberDuration: 1500,
+        isAutomatic: false,
+        actionType: "bolt_action"
+    },
+    // Add other weapons here...
+];
+
+// We add currentAmmo to each weapon object at the start.
+weapons.forEach(w => w.currentAmmo = w.maxAmmo);
