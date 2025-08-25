@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robust Full-Auto Simulator</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1e1e1e;
+            font-family: sans-serif;
+        }
+        #container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+        #hold-image, #shoot-gif, #reload-gif {
+            position: absolute;
+            width: 512px;
+            height: 320px;
+            object-fit: contain;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+        #shoot-gif, #reload-gif {
+            display: none;
+        }
+        #ammo-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            border-radius: 8px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <img id="hold-image" src="KEP.png" alt="Hold State">
+        <img id="shoot-gif" src="SHOOT.gif" alt="Shoot Animation">
+        <img id="reload-gif" src="RELOAD.gif" alt="Reload Animation">
+    </div>
+    
+    <div id="ammo-counter">30 / 30</div>
+
+    <script>
+        // --- 1. GET ELEMENTS & SETTINGS ---
+        const container = document.getElementById('container');
+        const holdImage = document.getElementById('hold-image');
+        const shootGif = document.getElementById('shoot-gif');
+        const reloadGif = document.getElementById('reload-gif');
+        const ammoCounter = document.getElementById('ammo-counter');
+
+        // --- 2. STATE VARIABLES & SETTINGS ---
+        let ammo = 30;
+        const maxAmmo = 30;
+        
+        let isReloading = false;
+        let isFiring = false; // Tracks the USER'S INTENT (mouse is held down)
+
+        const rateOfFire = 750; // Milliseconds between shots
+        const shootDuration = 800; // MUST be longer than rateOfFire to look good
+        const reloadDuration = 1250;
+        
+        // --- 3. CORE FUNCTIONS ---
+
+        function updateAmmoDisplay() {
+            ammoCounter.innerText = `${ammo} / ${maxAmmo}`;
+        }
+        
+        function handleReload() {
+            if (isReloading || ammo === maxAmmo) return;
+            
+            isReloading = true;
+            isFiring = false; // Crucial: Stop any ongoing fire loop
+
+            holdImage.style.display = 'none';
+            shootGif.style.display = 'none'; // Ensure shoot GIF is hidden
+            reloadGif.style.display = 'block';
+
+            const originalSrc = reloadGif.src;
+            reloadGif.src = '#';
+            reloadGif.src = originalSrc;
+            
+            setTimeout(() => {
+                ammo = maxAmmo;
+                updateAmmoDisplay();
+                reloadGif.style.display = 'none';
+                holdImage.style.display = 'block';
+                isReloading = false;
+            }, reloadDuration);
+        }
+
+        // --- 4. RE-ARCHITECTED FIRING LOOP (THE FIX) ---
+
+        // The single "shoot one bullet" animation function
+        function playShootAnimation() {
+            ammo--;
+            updateAmmoDisplay();
+
+            holdImage.style.display = 'none';
+            shootGif.style.display = 'block';
+            
+            const originalSrc = shootGif.src;
+            shootGif.src = '#';
+            shootGif.src = originalSrc;
+            
+            setTimeout(() => {
+                shootGif.style.display = 'none';
+                holdImage.style.display = 'block';
+                
+                // After the animation is done, check if we should fire the next shot
+                fireLoop();
+            }, shootDuration);
+        }
+
+        // The "engine" that decides IF we should fire
+        function fireLoop() {
+            // Check all conditions to STOP the loop
+            if (!isFiring || isReloading || ammo <= 0) {
+                if (ammo <= 0 && isFiring) { // auto-reload if holding fire on empty
+                    handleReload();
+                }
+                return; // Stop the loop
+            }
+
+            // All clear, let's shoot.
+            playShootAnimation();
+        }
+
+        function startShooting() {
+            if (isFiring || isReloading) return; // Don't start a new loop if one is active
+
+            isFiring = true;
+            fireLoop(); // Kick off the fire loop
+        }
+
+        function stopShooting() {
+            isFiring = false; // This will cause the fireLoop to stop itself
+        }
+        
+        // --- 5. EVENT LISTENERS ---
+
+        // Mouse Listeners
+        container.addEventListener('mousedown', startShooting);
+        window.addEventListener('mouseup', stopShooting);
+        container.addEventListener('mouseleave', stopShooting);
+
+        // Touch Listeners
+        container.addEventListener('touchstart', (e) => { e.preventDefault(); startShooting(); });
+        window.addEventListener('touchend', stopShooting);
+        window.addEventListener('touchcancel', stopShooting); // Safety for interrupted touches
+
+        // Keyboard Listener
+        window.addEventListener('keydown', (event) => {
+            if (event.key.toLowerCase() === 'r') {
+                handleReload();
+            }
+        });
+
+        updateAmmoDisplay();
+    </script>
+</body>
+</html>
