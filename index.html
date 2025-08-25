@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modular Weapon Simulator</title>
     <!-- Link to your stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="public/style.css">
 </head>
 <body>
 
@@ -43,13 +43,13 @@
     -->
 
     <!-- 1. The data must be loaded first so the other scripts can use it. -->
-    <script src="weaponData.js"></script>
+    <script src="public/weapondata.js"></script>
 
     <!-- 2. The handler is loaded second; it needs the data and defines functions for the wheel. -->
-    <script src="weaponHandler.js"></script>
-    
+    <script src="public/weaponHandler.js"></script>
+
     <!-- 3. The wheel is loaded last; it needs functions from the handler and data. -->
-    <script src="weaponWheel.js"></script>
+    <script src="public/weaponWheel.js"></script>
 
 </body>
 </html>
