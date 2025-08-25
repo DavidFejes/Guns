@@ -127,52 +127,37 @@ body, html {
 }
 /* In your style.css */
 /* This single class now controls all weapon visuals, guaranteeing they are the same size. */
-.weapon-image {
-    /* Set height based on the viewport. 40vh = 40% of the screen's height. */
-    height: 40vh;
-
-    /* Set a max-height to prevent it getting too big on very tall screens */
-    max-height: 600px;
-    
-    /* Let the width adjust automatically to maintain the aspect ratio */
-    width: auto;
-    
-    image-rendering: pixelated; /* Keeps pixel art crisp */
-
-    /* Ensure the GIFs are not visible by default */
-    display: none;
-    position: absolute; /* Stack them on top of each other */
-}
+/* A style.css fájlban */
+/* CSERÉLD LE a régi .weapon-image és #hold-image szabályokat ERRE */
 
 #weapon-display {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-/* A style.css fájl végére illeszd be */
-
-/* Stílus az új, különálló chambering animáció konténeréhez */
-/* A style.css fájlban */
-
-/* Cseréld le a régi #chamber-display szabályt erre a sokkal robusztusabbra */
-#chamber-display {
-    /* Abszolút pozicionálás */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Ez a trükk, ami tökéletesen középre teszi */
-
-    /* Alapból rejtve van, de ha látható, akkor flex container lesz */
-    display: none;
-    justify-content: center;
-    align-items: center;
+    height: 40vh;
+    max-height: 600px;
+    width: auto;
 }
 
-/* Az img szabály változatlan maradhat, de győződj meg róla, hogy létezik */
-#chamber-display img {
+.weapon-image {
+    /* --- Sizing (remains the same) --- */
     height: 40vh;
     max-height: 600px;
     width: auto;
     image-rendering: pixelated;
+
+    /* --- THE BULLETPROOF POSITIONING & VISIBILITY --- */
+    position: absolute;           /* Stack them on top of each other */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* The definitive centering trick */
+    
+    /* The key to the new method: they are invisible by default */
+    opacity: 0;
+    
+    /* Optional: A very fast transition to make the change feel even smoother */
+    transition: opacity 0.05s linear;
 }
+/* A style.css fájl végére illeszd be */
+

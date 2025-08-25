@@ -2,7 +2,6 @@
 let currentWeaponIndex = 0;
 let isReloading = false;
 let isAnimating = false;
-let isChambering = false; // ÚJ: Egy külön "zár" a forgózáras fegyverekhez
 let isFiring = false;
 let fireInterval = null;
 
@@ -11,11 +10,6 @@ const holdImage = document.getElementById('hold-image');
 const shootGif = document.getElementById('shoot-gif');
 const reloadGif = document.getElementById('reload-gif');
 // A weaponHandler.js tetején
-
-// ... (a többi const) ...
-const chamberGif = document.getElementById('chamber-gif');
-const chamberDisplay = document.getElementById('chamber-display'); // <<< EZ AZ ÚJ SOR
-// ... (a többi const) ...
 const ammoCounter = document.getElementById('ammo-counter');
 const currentWeaponUI = document.getElementById('current-weapon-ui');
 
@@ -24,7 +18,7 @@ function setVisualState(state) {
     holdImage.style.display = 'none';
     shootGif.style.display = 'none';
     reloadGif.style.display = 'none';
-    chamberGif.style.display = 'none'; // ÚJ
+    // ÚJ
 
     switch (state) {
         case 'shooting':
@@ -32,9 +26,6 @@ function setVisualState(state) {
             break;
         case 'reloading':
             reloadGif.style.display = 'block';
-            break;
-        case 'chambering': // ÚJ
-            chamberGif.style.display = 'flex';
             break;
         case 'idle':
         default:
@@ -54,7 +45,7 @@ function updateWeaponDisplay() {
 function handleReload() {
     const weapon = weapons[currentWeaponIndex];
     // ÚJ: Most már az isChambering állapotot is ellenőrizzük
-    if (isChambering || isReloading || isAnimating || weapon.currentAmmo === weapon.maxAmmo) return;
+    if (isReloading || isAnimating || weapon.currentAmmo === weapon.maxAmmo) return;
     
     stopShooting();
     isReloading = true;
@@ -80,52 +71,40 @@ function handleReload() {
 }
 
 // ÚJ: Ez az új funkció kezeli a megszakíthatatlan újratöltési animációt
-function handleChambering() {
-    isAnimating = true;
-    isChambering = true; // A legerősebb zár aktiválása
-    const weapon = weapons[currentWeaponIndex];
 
-    setVisualState('chambering');
-    chamberGif.src = weapon.chamberGif + '?t=' + new Date().getTime();
-
-    setTimeout(() => {
-        setVisualState('idle');
-        isAnimating = false;
-        isChambering = false; // A zár feloldása
-    }, weapon.chamberDuration);
-}
+// REPLACE YOUR OLD fireOnce() WITH THIS NEW ONE
 
 function fireOnce() {
     const weapon = weapons[currentWeaponIndex];
-    // ÚJ: Ellenőrizzük az isChambering állapotot is, ez a legfontosabb
-    if (isChambering || isAnimating || isReloading || weapon.currentAmmo <= 0) {
+
+    // This is the most important guard clause in the code.
+    // It prevents shots from overlapping, firing while reloading, or firing on empty.
+    if (isAnimating || isReloading || weapon.currentAmmo <= 0) {
+        // If the gun is empty, stop the full-auto loop.
         if (weapon.currentAmmo <= 0) {
             stopShooting();
         }
-        return;
+        return; // Do nothing.
     }
     
+    // If we passed the check, lock the state and play the animation.
     isAnimating = true;
     weapon.currentAmmo--;
     updateWeaponDisplay();
-    setVisualState('shooting');
-    shootGif.src = weapon.shootGif + '?t=' + new Date().getTime();
+    setVisualState('shooting'); // <--- This implicitly hid the static image
+    shootGif.src = weapon.shootGif + '?t=' + new
+ Date().getTime();
 
+    // After the animation duration, unlock the state.
     setTimeout(() => {
-        setVisualState('idle'); // Vissza alapállapotba a lövés után...
-        isAnimating = false; //...de még mielőtt feloldanánk a zárat...
-
-        // ÚJ LOGIKA: ...ellenőrizzük, hogy ez egy forgózáras fegyver-e!
-        if (weapon.actionType === 'bolt_action' && weapon.currentAmmo > 0) {
-            handleChambering(); // Ha igen, elindítjuk az új animációt
-        }
-
+        setVisualState('idle'); // <--- This brought the static image back
+        isAnimating = false; // Release the lock
     }, weapon.shootDuration);
 }
 
 function startShooting() {
     // ÚJ: A Chambering állapot itt is blokkol
-    if (isFiring || isReloading || isChambering) return;
+    if (isFiring || isReloading) return;
     isFiring = true;
 
     const weapon = weapons[currentWeaponIndex];
@@ -158,12 +137,10 @@ function setActiveWeapon(index) {
     isReloading = false;
     isAnimating = false;
     isFiring = false;
-    isChambering = false; 
     
     holdImage.src = weapon.holdImage;
     shootGif.src = weapon.shootGif;
     reloadGif.src = weapon.reloadGif;
-    chamberGif.src = weapon.chamberGif;
     
     setVisualState('idle');
     updateWeaponDisplay();

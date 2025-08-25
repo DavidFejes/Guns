@@ -12,8 +12,6 @@ const weapons = [
         reloadDuration: 2510, // 2.5 seconds
         // Behavior
         isAutomatic: false, // <<<-- We can add custom behavior flags!
-        chamberGif: "", // <<< Üres string
-        chamberDuration: 0, // <<< Nulla
         actionType: '' // <<< Üres string
 
     },
@@ -27,8 +25,6 @@ const weapons = [
         shootDuration: 150,
         reloadDuration: 2000,
         isAutomatic: true,
-        chamberGif: "", // <<< Üres string
-        chamberDuration: 0, // <<< Nulla
         actionType: '' // <<< Üres string
 
     },
@@ -43,8 +39,6 @@ const weapons = [
         reloadDuration: 1150,
         reloadType: "single_shell",
         isAutomatic: false,
-        chamberGif: "", // <<< Üres string
-        chamberDuration: 0, // <<< Nulla
         actionType: '' // <<< Üres string
 
     },
@@ -58,8 +52,6 @@ const weapons = [
         shootDuration: 920,
         reloadDuration: 730,
         isAutomatic: true,
-        chamberGif: "", // <<< Üres string
-        chamberDuration: 0, // <<< Nulla
         actionType: '' // <<< Üres string
 
     },
@@ -69,13 +61,11 @@ const weapons = [
         holdImage: "/weapons/kar98/kar98.png",
         shootGif: "/weapons/kar98/kar98-shoot.gif",
         reloadGif: "/weapons/kar98/kar98-reload.gif",
-        chamberGif: "/weapons/kar98/kar98-chamber.gif",
         maxAmmo: 5,
-        shootDuration: 1200,
+        shootDuration: 2700,
         reloadDuration: 3630,
-        chamberDuration: 1500,
         isAutomatic: false,
-        actionType: "bolt_action"
+        actionType: " "
     },
     // Add other weapons here...
 ];
