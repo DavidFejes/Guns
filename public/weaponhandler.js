@@ -166,6 +166,11 @@ function setActiveWeapon(index) {
     holdImage.src = weapon.holdImage;
     shootGif.src = weapon.shootGif;
     reloadGif.src = weapon.reloadGif;
+    // Force consistent size for all weapon images
+    [holdImage, shootGif, reloadGif].forEach(img => {
+        img.width = 512;
+        img.height = 320;
+    });
     
     setVisualState('idle');
     updateWeaponDisplay();
