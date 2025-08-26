@@ -34,13 +34,13 @@ volumeSlider.addEventListener('input', (event) => {
     // Check the value and set the icon's source accordingly.
     // The checks are performed from most specific to least specific.
     if (newVolume === 0) {
-        volumeIcon.src = '/buttons/VOLUME0.png';
+        volumeIcon.src = 'buttons/VOLUME0.png';
     } else if (newVolume <= 0.50) {
-        volumeIcon.src = '/buttons/VOLUME1.png';
+        volumeIcon.src = 'buttons/VOLUME1.png';
     } else if (newVolume < 1) {
-        volumeIcon.src = '/buttons/VOLUME2.png';
+        volumeIcon.src = 'buttons/VOLUME2.png';
     } else {
-        volumeIcon.src = '/buttons/VOLUME3.png';
+        volumeIcon.src = 'buttons/VOLUME3.png';
     }
     // --- END OF ICON LOGIC ---
 
