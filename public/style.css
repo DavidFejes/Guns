@@ -69,7 +69,7 @@ body, html {
     width: 90%;
     height: 90%;
     object-fit: contain;
-    filter: invert(1); /* if want to make weapons white change to 1*/
+    filter: invert(0); /* if want to make weapons white change to 1*/
 }
 
 .weapon-slot.highlighted img {
