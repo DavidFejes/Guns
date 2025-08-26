@@ -160,4 +160,104 @@ body, html {
     transition: opacity 0.05s linear;
 }
 /* A style.css fájl végére illeszd be */
+/* A style.css fájl végére */
 
+/* Stílus a teljes vezérlési segédlet konténeréhez */
+#controls-guide {
+    /* Pozicionálás a bal felső sarokba */
+    position: fixed; /* 'fixed', hogy mindig ott maradjon */
+    top: 20px;
+    left: 20px;
+    z-index: 100; /* Biztosítja, hogy minden más felett legyen */
+
+    /* Kinézet */
+    background-color: rgba(0, 0, 0, 0.5); /* Félátlátszó fekete háttér */
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+/* Egy-egy sor a segédleten belül (pl. az ikon + szöveg) */
+.control-item {
+    /* A flexbox segítségével egymás mellé rendezzük az ikont és a szöveget */
+    display: flex;
+    align-items: center; /* Függőlegesen középre igazítás */
+    
+    /* Térköz az elemek között */
+    margin-bottom: 12px;
+}
+/* Utolsó elem után ne legyen térköz */
+.control-item:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Az ikonok stílusa a segédleten belül */
+.control-item img {
+    height: 30px; /* Az ikon magassága */
+    width: auto;
+    margin-right: 15px; /* Térköz az ikon és a szöveg között */
+    image-rendering: pixelated;
+}
+
+/* A szöveg stílusa a segédleten belül */
+.control-item span {
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black; /* Egy kis árnyék a jobb olvashatóságért */
+}
+/* A style.css fájl végére */
+
+/* Alap stílus a hangerő slidernek */
+#volume-slider {
+    -webkit-appearance: none; /* Alapértelmezett böngésző stílusok eltávolítása (Chrome, Safari) */
+    appearance: none;
+    width: 100%; /* A rendelkezésre álló hely kitöltése */
+    height: 8px; /* A sáv magassága */
+    background: #555; /* A sáv háttere */
+    outline: none; /* Kijelölés körüli keret eltávolítása */
+    opacity: 0.8;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+#volume-slider:hover {
+    opacity: 1; /* Teljes láthatóság, ha fölé visszük az egeret */
+}
+
+/* A csúszka (a "pöcök") stílusa Webkit böngészőkhöz (Chrome, Safari) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px; /* A pöcök szélessége */
+    height: 20px; /* A pöcök magassága */
+    background: #fff; /* A pöcök színe (fehér) */
+    cursor: pointer; /* Egérkurzor mutasson rá */
+    border-radius: 50%; /* Kör alakú pöcök */
+}
+
+/* A csúszka stílusa Mozilla Firefoxhoz */
+#volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#controls-volume {
+    /* Pozicionálás a bal felső sarokba */
+    position: fixed; /* 'fixed', hogy mindig ott maradjon */
+    top: 220px;
+    left: 20px;
+    z-index: 100; /* Biztosítja, hogy minden más felett legyen */
+    width: 195px;
+    box-sizing: border-box;
+
+    /* Kinézet */
+    background-color: rgba(0, 0, 0, 0.5); /* Félátlátszó fekete háttér */
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}

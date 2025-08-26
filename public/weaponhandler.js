@@ -19,6 +19,39 @@ const shootSound = document.getElementById('shoot-sound');
 const reloadSound = document.getElementById('reload-sound');
 const chamberSound = document.getElementById('chamber-sound');
 const emptySound = document.getElementById('empty-sound');
+// A weaponHandler.js tetején, az element definícióknál
+
+// ... (többi const) ...
+
+const volumeSlider = document.getElementById('volume-slider');
+const volumeIcon = document.querySelector('#controls-volume img');
+
+volumeSlider.addEventListener('input', (event) => {
+    // Get the new volume value (it's a string, so we convert it to a number)
+    const newVolume = parseFloat(event.target.value);
+
+    // --- LOGIC TO CHANGE THE ICON ---
+    // Check the value and set the icon's source accordingly.
+    // The checks are performed from most specific to least specific.
+    if (newVolume === 0) {
+        volumeIcon.src = '/buttons/VOLUME0.png';
+    } else if (newVolume <= 0.50) {
+        volumeIcon.src = '/buttons/VOLUME1.png';
+    } else if (newVolume < 1) {
+        volumeIcon.src = '/buttons/VOLUME2.png';
+    } else {
+        volumeIcon.src = '/buttons/VOLUME3.png';
+    }
+    // --- END OF ICON LOGIC ---
+
+
+    // --- LOGIC TO SET THE ACTUAL VOLUME ---
+    // This part remains the same.
+    shootSound.volume = newVolume;
+    reloadSound.volume = newVolume;
+    chamberSound.volume = newVolume;
+    emptySound.volume = newVolume;
+});
 
 
 // A fenti element definíciók alá, de még a többi függvény elé
@@ -166,11 +199,6 @@ function setActiveWeapon(index) {
     holdImage.src = weapon.holdImage;
     shootGif.src = weapon.shootGif;
     reloadGif.src = weapon.reloadGif;
-    // Force consistent size for all weapon images
-    [holdImage, shootGif, reloadGif].forEach(img => {
-        img.width = 512;
-        img.height = 320;
-    });
     
     setVisualState('idle');
     updateWeaponDisplay();
