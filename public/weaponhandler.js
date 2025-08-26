@@ -12,6 +12,27 @@ const reloadGif = document.getElementById('reload-gif');
 // A weaponHandler.js tetején
 const ammoCounter = document.getElementById('ammo-counter');
 const currentWeaponUI = document.getElementById('current-weapon-ui');
+// A weaponHandler.js tetején, az element definícióknál
+
+// ... (többi const)
+const shootSound = document.getElementById('shoot-sound');
+const reloadSound = document.getElementById('reload-sound');
+const chamberSound = document.getElementById('chamber-sound');
+const emptySound = document.getElementById('empty-sound');
+
+
+// A fenti element definíciók alá, de még a többi függvény elé
+
+// Ez az új, központi hang lejátszó függvényünk
+function playSound(audioElement, soundFile) {
+    if (soundFile && audioElement) {
+        audioElement.src = soundFile;
+        // A currentTime = 0 trükk lehetővé teszi, hogy a hangot gyorsan
+        // egymás után is le lehessen játszani (pl. gyorstüzelésnél)
+        audioElement.currentTime = 0;
+        audioElement.play();
+    }
+}
 
 
 function setVisualState(state) {
@@ -51,6 +72,8 @@ function handleReload() {
     isReloading = true;
     isAnimating = true;
 
+     playSound(reloadSound, weapon.reloadSound);
+
     setVisualState('reloading');
     reloadGif.src = weapon.reloadGif + '?t=' + new Date().getTime();
             
@@ -80,6 +103,7 @@ function fireOnce() {
     // This is the most important guard clause in the code.
     // It prevents shots from overlapping, firing while reloading, or firing on empty.
     if (isAnimating || isReloading || weapon.currentAmmo <= 0) {
+         playSound(emptySound, weapon.emptySound);
         // If the gun is empty, stop the full-auto loop.
         if (weapon.currentAmmo <= 0) {
             stopShooting();
@@ -88,6 +112,7 @@ function fireOnce() {
     }
     
     // If we passed the check, lock the state and play the animation.
+    playSound(shootSound, weapon.shootSound);
     isAnimating = true;
     weapon.currentAmmo--;
     updateWeaponDisplay();
