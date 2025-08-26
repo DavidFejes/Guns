@@ -104,7 +104,7 @@ function fireOnce() {
 
 function startShooting() {
     // ÚJ: A Chambering állapot itt is blokkol
-    if (isFiring || isReloading) return;
+    if (isFiring || isReloading || isWheelVisible) return;
     isFiring = true;
 
     const weapon = weapons[currentWeaponIndex];

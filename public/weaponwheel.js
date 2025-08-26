@@ -91,6 +91,15 @@ window.addEventListener('contextmenu', (event) => {
 });
 window.addEventListener('mouseup', () => {
     if (isWheelVisible) {
+        event.stopPropagation();
+        closeWeaponWheel();
+    }
+});
+window.addEventListener('keydown', (event) => {
+    // Csak akkor csinálunk bármit, ha a fegyverválasztó kerék éppen látható
+    // ÉS ha a lenyomott gomb az 'Escape'
+    if (isWheelVisible && event.key === 'Escape') {
+        // Ha a feltételek teljesülnek, bezárjuk a kereket.
         closeWeaponWheel();
     }
 });

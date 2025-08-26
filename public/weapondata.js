@@ -16,14 +16,14 @@ const weapons = [
 
     },
     { 
-        name: "SMG", 
-        icon: "smg.png", 
-        holdImage: "smg-full.png",
-        shootGif: "smg-shoot.gif",
-        reloadGif: "smg-reload.gif",
-        maxAmmo: 30,
-        shootDuration: 150,
-        reloadDuration: 2000,
+        name: "MP5A3", 
+        icon: "/weapons/mp5a3/mp5a3.png", 
+        holdImage: "/weapons/mp5a3/mp5a3.png",
+        shootGif: "/weapons/mp5a3/mp5a3-shoot.gif",
+        reloadGif: "/weapons/mp5a3/mp5a3-reload.gif",
+        maxAmmo: 40,
+        shootDuration: 600,
+        reloadDuration: 1400,
         isAutomatic: true,
         actionType: '' // <<< Üres string
 
@@ -64,6 +64,18 @@ const weapons = [
         maxAmmo: 5,
         shootDuration: 2700,
         reloadDuration: 3630,
+        isAutomatic: false,
+        actionType: " "
+    },
+    { 
+        name: "Bazooka", 
+        icon: "/weapons/bazooka/bazooka.png", 
+        holdImage: "/weapons/bazooka/bazooka.png",
+        shootGif: "/weapons/bazooka/bazooka-shoot.gif",
+        reloadGif: "/weapons/bazooka/bazooka-reload.gif",
+        maxAmmo: 1,
+        shootDuration: 800,
+        reloadDuration: 1900,
         isAutomatic: false,
         actionType: " "
     },
