@@ -2,12 +2,12 @@ const weapons = [
     { 
         name: "Pistol",
         // Visuals
-        icon: "weapons/pistol/pistol.png", 
-        holdImage: "weapons/pistol/pistol.png",
-        shootGif: "weapons/pistol/pistol-shoot.gif",
-        reloadGif: "weapons/pistol/pistol-reload.gif",
-        shootSound: "weapons/pistol/pistol-shoot.wav",
-        reloadSound: "weapons/pistol/pistol-reload.wav",
+        icon: "Guns/weapons/pistol/pistol.png", 
+        holdImage: "Guns/weapons/pistol/pistol.png",
+        shootGif: "Guns/weapons/pistol/pistol-shoot.gif",
+        reloadGif: "Guns/weapons/pistol/pistol-reload.gif",
+        shootSound: "Guns/weapons/pistol/pistol-shoot.wav",
+        reloadSound: "Guns/weapons/pistol/pistol-reload.wav",
         // Stats
         maxAmmo: 12,
         shootDuration: 820, // Animation length
