@@ -2,22 +2,22 @@
 let isWheelVisible = false;
 let wheelCenterX, wheelCenterY;
 
-const weaponWheel = document.getElementById('weapon-wheel');
-const closeIcon = document.getElementById('close-icon');
+// EZ A GLOBÁLIS "ZÁR", AMI MEGOLDJA a lövés-a-választáskor hibát.
+let isWheelOpen = false;
 
-// --- WHEEL LOGIC ---
+const weaponWheel = document.getElementById('weapon-wheel');
+
+
+// --- WHEEL LOGIC (Ez a részed már jó volt) ---
 
 function createWeaponWheel() {
-    // It reads the global 'weapons' array from weaponData.js
     const angleIncrement = 360 / weapons.length;
     weapons.forEach((weapon, index) => {
         const slot = document.createElement('div');
         slot.className = 'weapon-slot';
         slot.dataset.weaponIndex = index;
-        
         const angle = index * angleIncrement;
         slot.style.setProperty('--angle', `${angle}deg`);
-
         const icon = document.createElement('img');
         icon.src = weapon.icon;
         icon.alt = weapon.name;
@@ -26,57 +26,84 @@ function createWeaponWheel() {
     });
 }
 
+
+// --- JAVÍTOTT FUNKCIÓK (TOUCH & MOUSE KEZELÉS) ---
+
 function openWeaponWheel(event) {
+    // Kinyerjük a koordinátákat, akár érintés, akár egér az esemény.
+    const touchPoint = event.touches ? event.touches[0] : event;
+    const clientX = touchPoint.clientX;
+    const clientY = touchPoint.clientY;
+    
+    isWheelOpen = true; // BEKAPCSOLJUK A GLOBÁLIS ZÁRAT!
     isWheelVisible = true;
     
-    weaponWheel.style.left = `${event.clientX}px`;
-    weaponWheel.style.top = `${event.clientY}px`;
+    weaponWheel.style.left = `${clientX}px`;
+    weaponWheel.style.top = `${clientY}px`;
     weaponWheel.style.display = 'flex';
     
     const wheelRect = weaponWheel.getBoundingClientRect();
     wheelCenterX = wheelRect.left + wheelRect.width / 2;
     wheelCenterY = wheelRect.top + wheelRect.height / 2;
     
+    // Figyeljük az egeret ÉS az érintést is.
     window.addEventListener('mousemove', handleWheelMouseMove);
+    window.addEventListener('touchmove', handleWheelMouseMove, { passive: false }); // 'passive: false' fontos mobilon
 }
 
 function closeWeaponWheel() {
+    isWheelOpen = false; // KIKAPCSOLJUK A GLOBÁLIS ZÁRAT!
     if (!isWheelVisible) return;
+
     isWheelVisible = false;
     weaponWheel.style.display = 'none';
 
+    // Eltávolítjuk MINDKÉT figyelőt.
     window.removeEventListener('mousemove', handleWheelMouseMove);
+    window.removeEventListener('touchmove', handleWheelMouseMove);
 
     const highlightedSlot = document.querySelector('.weapon-slot.highlighted');
     if (highlightedSlot) {
         const selectedIndex = parseInt(highlightedSlot.dataset.weaponIndex);
-        
-        // --- THIS IS THE COMMUNICATION STEP ---
-        // Instead of updating things itself, it tells the weaponHandler what to do.
         setActiveWeapon(selectedIndex);
-        
         highlightedSlot.classList.remove('highlighted');
     }
 }
 
 function handleWheelMouseMove(event) {
     if (!isWheelVisible) return;
-    const dx = event.clientX - wheelCenterX;
-    const dy = event.clientY - wheelCenterY;
+
+    // Itt is kinyerjük a koordinátákat mindkét eseménytípusból.
+    const touchPoint = event.touches ? event.touches[0] : event;
+    const clientX = touchPoint.clientX;
+    const clientY = touchPoint.clientY;
+    
+    // Hogy a PWA ne görgessen húzás közben (fontos mobilon)
+    if (event.touches) {
+        event.preventDefault();
+    }
+
+    const dx = clientX - wheelCenterX;
+    const dy = clientY - wheelCenterY;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < 40) { 
+    
+    // Kisebb holt zóna az érzékenységért
+    if (dist < 20) { 
         clearHighlights();
         return;
     }
+    
     let angle = Math.atan2(dy, dx) * (180 / Math.PI);
     if (angle < 0) angle += 360;
     
     const anglePerSegment = 360 / weapons.length;
-    const segmentIndex = Math.floor((angle + anglePerSegment / 2) / anglePerSegment) % weapons.length;
+    const segmentIndex = Math.floor(angle / anglePerSegment);
 
     clearHighlights();
     const slots = document.querySelectorAll('.weapon-slot');
-    slots[segmentIndex].classList.add('highlighted');
+    if (slots[segmentIndex]) {
+        slots[segmentIndex].classList.add('highlighted');
+    }
 }
 
 function clearHighlights() {
@@ -85,25 +112,52 @@ function clearHighlights() {
     });
 }
 
-// --- EVENT LISTENERS ---
+
+// --- JAVÍTOTT EVENT LISTENERS (Figyeli a touchend-et is!) ---
+
+// Jobb klikk asztali gépen
 window.addEventListener('contextmenu', (event) => {
     event.preventDefault();
     openWeaponWheel(event);
 });
+
+// Hosszú érintés mobilon (ez a mobil "jobb klikk")
+let touchTimer;
+window.addEventListener('touchstart', (event) => {
+    // Ha nem egy ujjal érint, ne csináljon semmit
+    if (event.touches.length > 1) return;
+    
+    touchTimer = setTimeout(() => {
+        event.preventDefault(); // Megakadályozzuk a böngésző alapértelmezett menüjét
+        openWeaponWheel(event);
+    }, 500); // 500ms (fél másodperc) után számít hosszú érintésnek
+});
+
+// A mouseup esemény mindkét platformon zár
 window.addEventListener('mouseup', () => {
     if (isWheelVisible) {
-        event.stopPropagation();
         closeWeaponWheel();
     }
 });
+
+// FONTOS: Az ujj felemelése mobilon is zár!
+window.addEventListener('touchend', () => {
+    // Töröljük a hosszú érintés időzítőjét, hogy egy sima koppintás ne nyissa meg a menüt
+    clearTimeout(touchTimer);
+
+    if (isWheelVisible) {
+        closeWeaponWheel();
+    }
+});
+
+
+// Escape gombos bezárás (ez a részed már jó volt)
 window.addEventListener('keydown', (event) => {
-    // Csak akkor csinálunk bármit, ha a fegyverválasztó kerék éppen látható
-    // ÉS ha a lenyomott gomb az 'Escape'
     if (isWheelVisible && event.key === 'Escape') {
-        // Ha a feltételek teljesülnek, bezárjuk a kereket.
         closeWeaponWheel();
     }
 });
+
 
 // --- INITIALIZATION ---
 createWeaponWheel();
