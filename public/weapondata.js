@@ -92,7 +92,7 @@ const weapons = [
         actionType: " "
     },
     { 
-        name: "Revolver-Colt 45", 
+        name: "Colt 45", 
         icon: "weapons/revolver-colt45/revolver-colt45.png", 
         holdImage: "weapons/revolver-colt45/revolver-colt45.png",
         shootGif: "weapons/revolver-colt45/revolver-colt45-shoot.gif",

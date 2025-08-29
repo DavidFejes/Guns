@@ -1,0 +1,22 @@
+{
+  "name": "Gun Simulator",
+  "short_name": "Guns",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#181824",
+  "theme_color": "#181824",
+  "viewport": "width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "favicon/guns.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon/gunswbg.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

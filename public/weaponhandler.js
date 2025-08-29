@@ -22,7 +22,6 @@ const emptySound = document.getElementById('empty-sound');
 // A weaponHandler.js tetején, az element definícióknál
 
 // ... (többi const) ...
-
 const volumeSlider = document.getElementById('volume-slider');
 const volumeIcon = document.querySelector('#controls-volume img');
 
