@@ -4,7 +4,6 @@ let isReloading = false;
 let isAnimating = false;
 let isFiring = false;
 let fireInterval = null;
-let isAudioUnlocked = false; // <<< ÚJ "ZÁR" VÁLTOZÓ
 
 const container = document.getElementById('container');
 const holdImage = document.getElementById('hold-image');
