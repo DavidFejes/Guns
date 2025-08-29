@@ -3,6 +3,7 @@ let isWheelVisible = false;
 let wheelCenterX, wheelCenterY;
 
 const weaponWheel = document.getElementById('weapon-wheel');
+const closeIcon = document.getElementById('close-icon');
 
 // --- WHEEL LOGIC ---
 

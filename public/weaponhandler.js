@@ -4,6 +4,7 @@ let isReloading = false;
 let isAnimating = false;
 let isFiring = false;
 let fireInterval = null;
+let isAudioUnlocked = false; // <<< ÚJ "ZÁR" VÁLTOZÓ
 
 const container = document.getElementById('container');
 const holdImage = document.getElementById('hold-image');
@@ -24,6 +25,92 @@ const emptySound = document.getElementById('empty-sound');
 // ... (többi const) ...
 const volumeSlider = document.getElementById('volume-slider');
 const volumeIcon = document.querySelector('#controls-volume img');
+
+
+// A weaponHandler.js fájl végén
+
+// --- INTERACTIVE GUIDE LISTENERS ---
+const fireIcon = document.getElementById('fire-icon');
+const wheelIcon = document.getElementById('wheel-icon');
+const reloadIcon = document.getElementById('reload-icon');
+
+// Tüzelés ikonra kattintás
+if (fireIcon) {
+    fireIcon.addEventListener('click', (event) => {
+        // Megakadályozzuk, hogy a kattintás a háttérre is átterjedjen,
+        // ami esetleg elindítaná a normál lövést is.
+        event.stopPropagation();
+
+        // Lefuttatjuk a lövés animációt (de a full-auto ciklust nem indítjuk el).
+        // Ez egy "bemutató" lövés lesz.
+        fireOnce(); 
+    });
+}
+
+// Újratöltés ikonra kattintás
+if (reloadIcon) {
+    reloadIcon.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        // Meghívjuk a már létező újratöltés függvényt.
+        handleReload();
+    });
+}
+
+// A fegyverválasztó kerék ikonjára egy kicsit másképp kell rákattintanunk.
+// Ehhez egy globális hivatkozás kell. A 'weaponWheel.js' fájlban
+// az 'openWeaponWheel' függvénynek globálisnak kell lennie.
+// De egyszerűbb, ha szimulálunk egy jobb klikket.
+
+if (wheelIcon) {
+    wheelIcon.addEventListener('click', (event) => {
+        event.stopPropagation();
+        
+        // Szimulálunk egy jobb klikk eseményt a képernyő közepén,
+        // hogy meghívjuk a fegyverválasztó kereket.
+        const rightClickEvent = new MouseEvent('contextmenu', {
+            bubbles: true,
+            cancelable: true,
+            clientX: window.innerWidth / 2,
+            clientY: window.innerHeight / 2
+        });
+        // Az eseményt a fő konténeren "sütjük el".
+        container.dispatchEvent(rightClickEvent);
+    });
+}
+
+// A többi függvény mellé illeszd be
+
+function unlockAudioContext() {
+    // Ha már feloldottuk, nem csinálunk semmit
+    if (isAudioUnlocked) return;
+
+    // Megpróbáljuk lejátszani a néma hangot
+    unlockAudio.play().then(() => {
+        // Ha sikerült, beállítjuk a zárat, és kiírjuk a konzolra a sikert
+        isAudioUnlocked = true;
+        console.log('Audio context unlocked successfully.');
+    }).catch(error => {
+        // Ha hiba történik, azt is kiírjuk (ritka eset)
+        console.error('Audio context unlock failed:', error);
+    });
+}
+
+// A // --- EVENT LISTENERS --- szekcióban
+
+container.addEventListener('mousedown', (event) => {
+    unlockAudioContext(); // <<< ÚJ HÍVÁS
+    if (event.button === 0) {
+        startShooting();
+    }
+});
+// ...
+
+container.addEventListener('touchstart', (e) => {
+    unlockAudioContext(); // <<< ÚJ HÍVÁS
+    e.preventDefault(); 
+    startShooting(); 
+});
 
 volumeSlider.addEventListener('input', (event) => {
     // Get the new volume value (it's a string, so we convert it to a number)

@@ -13,6 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
+    <meta name="user-scalable" content="no">
     <title>Gun Simulator</title>
     <!-- Link to your stylesheet -->
     <link rel="stylesheet" href="public/style.css">
@@ -21,19 +22,19 @@
 
     <div id="controls-guide">
         <div class="control-item">
-            <img src="buttons/MOUSEBUTTONLEFT.png" alt="Left Mouse Button">
+            <img id="fire-icon" src="buttons/MOUSEBUTTONLEFT.png" alt="Left Mouse Button">
             <span>Fire</span>
         </div>
         <div class="control-item">
-            <img src="buttons/MOUSEBUTTONRIGHT.png" alt="Right Mouse Button">
+            <img id="wheel-icon" src="buttons/MOUSEBUTTONRIGHT.png" alt="Right Mouse Button">
             <span>Weapon Switch</span>
         </div>
         <div class="control-item">
-            <img src="buttons/R.png" alt="R Key">
+            <img id="reload-icon" src="buttons/R.png" alt="R Key">
             <span>Reload</span>
         </div>
         <div class="control-item">
-            <img src="buttons/ESC.png" alt="Escape Key">
+            <img id="close-icon" src="buttons/ESC.png" alt="Escape Key">
             <span>Close Menu</span>
           
         </div>
@@ -54,6 +55,7 @@
     </div>
     <audio id="shoot-sound"></audio>
     <audio id="reload-sound"></audio>
+    <audio id="unlock-audio" src="silent.mp3" muted playsinline></audio>
     
      
     
