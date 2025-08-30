@@ -33,7 +33,10 @@ const fireIcon = document.getElementById('fire-icon');
 const wheelIcon = document.getElementById('wheel-icon');
 const reloadIcon = document.getElementById('reload-icon');
 
-// Tüzelés ikonra kattintás
+
+
+
+// Tüzelés ikonra kattintása
 if (fireIcon) {
     fireIcon.addEventListener('click', (event) => {
         // Megakadályozzuk, hogy a kattintás a háttérre is átterjedjen,

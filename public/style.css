@@ -1,3 +1,25 @@
+@media all and (display-mode: standalone) {
+    /*PWA view styles */
+    #weapon-wheel {
+    position: absolute;
+    width: 250px; /* The diameter of the wheel */
+    height: 250px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Initially hidden and non-interactive */
+    display: none; 
+    pointer-events: none; 
+    /* Flexbox to center the slots' origin point */
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* This centers the wheel on its top/left coords */
+}
+    #controls-volume {
+        display: none;
+    }
+}
+
 /* --- GLOBAL STYLES --- */
 body, html {
     margin: 0;
