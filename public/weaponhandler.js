@@ -14,13 +14,12 @@ const currentWeaponUI = document.getElementById('current-weapon-ui');
 // Audio elemek
 const shootSound = document.getElementById('shoot-sound');
 const reloadSound = document.getElementById('reload-sound');
-const chamberSound = document.getElementById('chamber-sound'); // Még mindig szükség lehet rá, ha külön hangfájlt használsz
 const emptySound = document.getElementById('empty-sound');
 const unlockAudio = document.getElementById('unlock-audio');
 
 // UI elemek
 const volumeSlider = document.getElementById('volume-slider');
-const volumeIcon = document.querySelector('#settings-guide .control-item img'); 
+const volumeIcon = document.querySelector('#settings-guide .control-item img');
 const fireIcon = document.getElementById('fire-icon');
 const wheelIcon = document.getElementById('wheel-icon');
 const reloadIcon = document.getElementById('reload-icon');
@@ -31,7 +30,6 @@ let isAudioUnlocked = false;
 
 // --- CORE FUNCTIONS ---
 
-// Központi hang lejátszó
 function playSound(audioElement, soundFile) {
     if (soundFile && audioElement) {
         audioElement.src = soundFile;
@@ -40,34 +38,24 @@ function playSound(audioElement, soundFile) {
     }
 }
 
-// Központi vizuális vezérlő
 function setVisualState(state) {
     holdImage.style.display = 'none';
     shootGif.style.display = 'none';
     reloadGif.style.display = 'none';
 
     switch (state) {
-        case 'shooting':
-            shootGif.style.display = 'block';
-            break;
-        case 'reloading':
-            reloadGif.style.display = 'block';
-            break;
-        case 'idle':
-        default:
-            holdImage.style.display = 'block';
-            break;
+        case 'shooting': shootGif.style.display = 'block'; break;
+        case 'reloading': reloadGif.style.display = 'block'; break;
+        case 'idle': default: holdImage.style.display = 'block'; break;
     }
 }
 
-// UI frissítő
 function updateWeaponDisplay() {
     const weapon = weapons[currentWeaponIndex];
     ammoCounter.innerText = `${weapon.currentAmmo} / ${weapon.maxAmmo}`;
     currentWeaponUI.innerText = weapon.name;
 }
 
-// Újratöltés
 function handleReload() {
     const weapon = weapons[currentWeaponIndex];
     if (isReloading || isAnimating || weapon.currentAmmo === weapon.maxAmmo) return;
@@ -92,10 +80,8 @@ function handleReload() {
     }, weapon.reloadDuration);
 }
 
-// Ez a függvény felel egyetlen lövésért.
 function fireOnce() {
     const weapon = weapons[currentWeaponIndex];
-
     if (isAnimating || isReloading || weapon.currentAmmo <= 0) {
         if (!isAnimating && !isReloading && weapon.currentAmmo <= 0) {
              playSound(emptySound, weapon.emptySound);
@@ -103,21 +89,19 @@ function fireOnce() {
         return;
     }
     
-    isAnimating = true; // Zároljuk a rendszert
+    isAnimating = true;
     playSound(shootSound, weapon.shootSound);
     weapon.currentAmmo--;
     updateWeaponDisplay();
     setVisualState('shooting');
     shootGif.src = weapon.shootGif + '?t=' + new Date().getTime();
 
-    // A setTimeout az adatbázisból (weaponData.js) veszi a shootDuration-t.
     setTimeout(() => {
         setVisualState('idle');
-        isAnimating = false; // Feloldjuk a zárat
+        isAnimating = false;
     }, weapon.shootDuration);
 }
 
-// A kattintást kezelő fő funkció
 function handlePrimaryAction() {
     if (isWheelOpen || isAnimating || isReloading) return;
     
@@ -125,33 +109,24 @@ function handlePrimaryAction() {
         handleReload();
         return;
     }
-    
     fireOnce();
 }
 
-// Fegyverválasztó vezérlője
 function setActiveWeapon(index) {
     if (index < 0 || index >= weapons.length) return;
-    
     currentWeaponIndex = index;
     const weapon = weapons[currentWeaponIndex];
-    
     isReloading = false;
     isAnimating = false;
-    
     holdImage.src = weapon.holdImage;
     shootGif.src = weapon.shootGif;
     reloadGif.src = weapon.reloadGif;
-    
     setVisualState('idle');
     updateWeaponDisplay();
 }
 
-// Mobil hang feloldása
 function unlockAudioContext() {
-    if (isAudioUnlocked) return;
-    if (!unlockAudio) return;
-
+    if (isAudioUnlocked || !unlockAudio) return;
     unlockAudio.play().then(() => {
         isAudioUnlocked = true;
         console.log('Audio context unlocked successfully.');
@@ -163,7 +138,6 @@ function unlockAudioContext() {
 
 // --- EVENT LISTENERS ---
 
-// Lövés bal klikkre bárhol a képernyőn
 container.addEventListener('mousedown', (event) => {
     if (event.button === 0) {
         unlockAudioContext();
@@ -171,50 +145,43 @@ container.addEventListener('mousedown', (event) => {
     }
 });
 
-// Lövés érintésre bárhol a képernyőn
-// A JAVÍTOTT, KÉTUJJAS ÉRINTÉST KEZELŐ listener
-container.addEventListener('touchstart', (e) => {
-    e.preventDefault(); 
+container.addEventListener('touchstart', (event) => {
+    event.preventDefault();
     unlockAudioContext();
 
-    // EZ AZ ÚJ LOGIKA:
-    // Megnézzük, hány érintési pont van éppen a képernyőn.
-    if (e.touches.length >= 2) {
-        // Ha 2 vagy több ("két faszom virsli ujj"), akkor újratöltünk.
+    if (event.touches.length >= 2) {
         handleReload();
-    } else {
-        // Ha csak 1 ujj érinti, akkor a normál akció (lövés) történik.
-        handlePrimaryAction(); 
+    } else if (event.touches.length === 1) {
+        handlePrimaryAction();
     }
 });
 
-// Kézi újratöltés 'R' gombra
 window.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'r') {
         handleReload();
     }
 });
 
-// Interaktív segédlet ikonok
 if (fireIcon) {
-    fireIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
+    fireIcon.addEventListener('mousedown', (e) => e.stopPropagation());
+    fireIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
         handlePrimaryAction();
     });
 }
+
 if (reloadIcon) {
-    reloadIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
+    reloadIcon.addEventListener('mousedown', (e) => e.stopPropagation());
+    reloadIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
         handleReload();
     });
-    
-    reloadIcon.addEventListener('mousedown', (event) => {
-        event.stopPropagation();
-    });
 }
+
 if (wheelIcon) {
-    wheelIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
+    wheelIcon.addEventListener('mousedown', (e) => e.stopPropagation());
+    wheelIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
         const rightClickEvent = new MouseEvent('contextmenu', {
             bubbles: true, cancelable: true, clientX: window.innerWidth / 2, clientY: window.innerHeight / 2
         });
@@ -222,26 +189,18 @@ if (wheelIcon) {
     });
 }
 
-// Hangerő szabályzó
 if (volumeSlider) {
     volumeSlider.addEventListener('input', (event) => {
         const newVolume = parseFloat(event.target.value);
-
         if (volumeIcon) {
-             if (newVolume === 0) {
-                volumeIcon.src = 'buttons/VOLUME0.png';
-            } else if (newVolume <= 0.50) {
-                volumeIcon.src = 'buttons/VOLUME1.png';
-            } else if (newVolume < 1) {
-                volumeIcon.src = 'buttons/VOLUME2.png';
-            } else {
-                volumeIcon.src = 'buttons/VOLUME3.png';
-            }
+            if (newVolume === 0) { volumeIcon.src = 'buttons/VOLUME0.png'; }
+            else if (newVolume <= 0.50) { volumeIcon.src = 'buttons/VOLUME1.png'; }
+            else if (newVolume < 1) { volumeIcon.src = 'buttons/VOLUME2.png'; }
+            else { volumeIcon.src = 'buttons/VOLUME3.png'; }
         }
-    
         shootSound.volume = newVolume;
         reloadSound.volume = newVolume;
-        chamberSound.volume = newVolume; // Ez is beállítódik, ha esetleg használnád
+        // Mivel a chamberSound változót eltávolítottam a tetejéről, itt is ki kell venni.
         emptySound.volume = newVolume;
     });
 }
