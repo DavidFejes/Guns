@@ -2,8 +2,8 @@
     /*PWA view styles */
     #weapon-wheel {
     position: absolute;
-    width: 250px; /* The diameter of the wheel */
-    height: 250px;
+    width: 200px; /* The diameter of the wheel */
+    height: 200px;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(0, 0, 0, 0.6);
@@ -15,6 +15,9 @@
     align-items: center;
     transform: translate(-50%, -50%); /* This centers the wheel on its top/left coords */
 }
+    #controls-guide {
+        display: none;
+    }
     #controls-volume {
         display: none;
     }
