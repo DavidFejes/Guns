@@ -2,6 +2,8 @@
 let currentWeaponIndex = 0;
 let isReloading = false;
 let isAnimating = false;
+let lastTap = null;           // <<< EZ AZ ÚJ SOR: Az utolsó érintés időbélyegét tárolja.
+const doubleTapDelay = 150; // <<< EZ AZ ÚJ SOR: Az időablak milliszekundumban (150ms = 0.15s).
 
 // HTML elemek begyűjtése
 const container = document.getElementById('container');
@@ -146,15 +148,25 @@ container.addEventListener('mousedown', (event) => {
 });
 
 container.addEventListener('touchstart', (event) => {
-    event.preventDefault();
+    event.preventDefault(); 
     unlockAudioContext();
-
-    if (event.touches.length >= 2) {
+    
+    const currentTime = new Date().getTime(); // Az aktuális időbélyeg
+    
+    // Ellenőrizzük, hogy volt-e már egy koppintás nemrég
+    if (lastTap && (currentTime - lastTap) < doubleTapDelay) {
+        // HA IGEN: Ez egy "dupla" vagy gyors második koppintás!
+        // Töröljük a `lastTap` értékét, hogy ne ragadjon be a reload,
+        // és elindítjuk a töltést.
+        lastTap = null;
         handleReload();
-    } else if (event.touches.length === 1) {
+
+    } else {
+        // HA NEM: Ez egy sima, első koppintás.
+        // Eltároljuk az idejét és elindítjuk a lövést.
+        lastTap = currentTime;
         handlePrimaryAction();
-    }
-});
+    })
 
 window.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'r') {
