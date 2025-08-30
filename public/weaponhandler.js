@@ -166,7 +166,8 @@ container.addEventListener('touchstart', (event) => {
         // Eltároljuk az idejét és elindítjuk a lövést.
         lastTap = currentTime;
         handlePrimaryAction();
-    })
+    }
+});
 
 window.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'r') {
