@@ -172,10 +172,20 @@ container.addEventListener('mousedown', (event) => {
 });
 
 // Lövés érintésre bárhol a képernyőn
+// A JAVÍTOTT, KÉTUJJAS ÉRINTÉST KEZELŐ listener
 container.addEventListener('touchstart', (e) => {
     e.preventDefault(); 
     unlockAudioContext();
-    handlePrimaryAction(); 
+
+    // EZ AZ ÚJ LOGIKA:
+    // Megnézzük, hány érintési pont van éppen a képernyőn.
+    if (e.touches.length >= 2) {
+        // Ha 2 vagy több ("két faszom virsli ujj"), akkor újratöltünk.
+        handleReload();
+    } else {
+        // Ha csak 1 ujj érinti, akkor a normál akció (lövés) történik.
+        handlePrimaryAction(); 
+    }
 });
 
 // Kézi újratöltés 'R' gombra
