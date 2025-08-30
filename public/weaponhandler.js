@@ -21,7 +21,7 @@ const unlockAudio = document.getElementById('unlock-audio');
 
 // UI elemek
 const volumeSlider = document.getElementById('volume-slider');
-const volumeIcon = document.querySelector('#settings-guide .control-item img');
+const volumeIcon = document.getElementById('volume-icon-img');
 const fireIcon = document.getElementById('fire-icon');
 const wheelIcon = document.getElementById('wheel-icon');
 const reloadIcon = document.getElementById('reload-icon');
