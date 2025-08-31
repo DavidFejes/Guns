@@ -25,10 +25,19 @@ const volumeIcon = document.getElementById('volume-icon-img');
 const fireIcon = document.getElementById('fire-icon');
 const wheelIcon = document.getElementById('wheel-icon');
 const reloadIcon = document.getElementById('reload-icon');
+const reload = document.getElementById('reload');
 
-// Mobil feloldás állapota
+/* Mobil feloldás állapota */
 let isAudioUnlocked = false;
 
+
+if (reload) {
+    reload.addEventListener('mousedown', (e) => e.stopPropagation());
+    reload.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleReload();
+    });
+}
 
 // --- CORE FUNCTIONS ---
 
