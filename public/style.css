@@ -2,8 +2,8 @@
     /*PWA view styles */
     #weapon-wheel {
     position: absolute;
-    width: 200px; /* The diameter of the wheel */
-    height: 200px;
+    width: 300px; /* The diameter of the wheel */
+    height: 300px   ;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(0, 0, 0, 0.6);
@@ -40,22 +40,41 @@
     align-items: center;
 }
 
+
+/* Az ikon mérete változatlanul 40x40px marad */
+#reload-button {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    z-index: 10;
+    cursor: pointer;
+    
+    /* Ezek a sorok tökéletesen középre teszik a benne lévő ikont */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #reload-button:hover {
     background-color: rgba(25, 25, 25, 0.9);
 }
 
-/* Az ikon mérete változatlanul 40x40px marad */
-#reload img{
+/* Az ikon mérete, mindenféle pozicionálás nélkül */
+#reload-button img {
     height: 35px;
     width: 35px;
     image-rendering: pixelated;
-     position: absolute;           /* Kivesszük a normál folyamból */
-    top: 50%;                     /* A kép felső szélét a szülő (a 70x70-es gomb) közepére toljuk */
-    left: 50%;                    /* A kép bal szélét a szülő közepére toljuk */
-    transform: translate(-50%, -50%); /* A kép SAJÁT MÉRETÉNEK felével visszahúzzuk */
-}
-    
-}
+}}
+
+
+
+
+/* Az ikon mérete változatlanul 40x40px marad */
+
 
 
 
@@ -91,21 +110,7 @@ body, html {
 }
 
 /* --- WEAPON WHEEL STYLES --- */
-#weapon-wheel {
-    position: absolute;
-    width: 300px; /* The diameter of the wheel */
-    height: 300px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Initially hidden and non-interactive */
-    display: none; 
-    pointer-events: none; 
-    /* Flexbox to center the slots' origin point */
-    justify-content: center;
-    align-items: center;
-    transform: translate(-50%, -50%); /* This centers the wheel on its top/left coords */
-}
+
 
 .weapon-slot {
     position: absolute;
@@ -330,10 +335,29 @@ body, html {
 
 /* Stílus a gomb konténeréhez */
 
-#reload-button{
-    display: none;
+@media not all and (display-mode: standalone) {
+    /*PWA view styles */
+
+    #reload-button {
+        display: none;
 }
 
-.reload img {
-    display: none;
-}
+    .reload img {
+        display: none;
+    }
+    
+    #weapon-wheel {
+    position: absolute;
+    width: 300px; /* The diameter of the wheel */
+    height: 300px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Initially hidden and non-interactive */
+    display: none; 
+    pointer-events: none; 
+    /* Flexbox to center the slots' origin point */
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* This centers the wheel on its top/left coords */
+}}
