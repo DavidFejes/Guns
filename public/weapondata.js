@@ -119,6 +119,20 @@ const weapons = [
         isAutomatic: true,
         actionType: " "
     },
+    { 
+        name: "Hand", 
+        icon: "weapons/hand/hand.png", 
+        holdImage: "weapons/hand/hand.png",
+        shootGif: "weapons/hand/hand-shoot.gif",
+        reloadGif: "weapons/hand/hand-reload.gif",
+        shootSound: "weapons/hand/hand-shoot.wav",
+        reloadSound: "weapons/hand/hand-reload.wav",
+        maxAmmo: 5,
+        shootDuration: 440,
+        reloadDuration: 1950,
+        isAutomatic: false,
+        actionType: " "
+    },
     // Add other weapons here...
 ];
 
